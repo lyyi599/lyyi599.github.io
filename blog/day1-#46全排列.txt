@@ -1,0 +1,56 @@
+题目地址：https://leetcode.cn/problems/permutations/
+
+题解思路：
+1.回溯剪枝
+2.next_permutatio函数快速全排列
+
+题解代码：
+思路1：
+class Solution {
+public:
+    vector<vector<int>> permute(vector<int>& nums) {
+        vector<vector<int>> ans;
+        vector<int> re;
+        vector<int> used(nums.size(),0);
+        dfs(ans,re,used,nums);
+        return ans;
+    }
+
+    void dfs(vector<vector<int>>&ans, vector<int>&re, vector<int>& used, vector<int>&nums){
+        if(re.size()==nums.size()){
+            ans.push_back(re);
+            return ;
+        }
+        for(int i=0;i<nums.size();i++){
+            if(used[i]!=0)continue;
+            else {
+                re.push_back(nums[i]);
+                used[i]=1;
+
+                dfs(ans,re,used,nums);
+
+                re.pop_back();
+                used[i]=0;
+            }
+        }
+    }
+};
+
+思路2：
+class Solution {
+public:
+    vector<vector<int>> permute(vector<int>& nums) {
+        sort(nums.begin(),nums.end());
+        vector<vector<int>> arr;
+        do{
+            arr.push_back(nums);
+        }while(next_permutation(nums.begin(),nums.end()));
+        return arr;
+    }
+};
+
+题目反思：
+这个题目很常规，但是做一点总结：dfs和回溯。
+dfs和回溯有非常多的相似之处，简单来说，他们都用到了递归这样的思想和方法，同时它们也用到了后进先出的堆栈的逻辑。dfs是一种搜索方式，强调一种遍历方法，我们应该如何去找解；回溯强调dfs时，遇到不可能的解进行回退操作，该操作对于找到解它的合理性。从思想上它们时相似的，只不过强调的方面不同，分别是如何找和这么找的合理性。综合来说，两者其实都是一种暴力搜索的方法，加上剪枝，能够省下一定的时间，从而达到优化算法的目标。
+另附评论区大佬的总结，下班。
+https://leetcode.cn/problems/permutations/solution/hui-su-suan-fa-python-dai-ma-java-dai-ma-by-liweiw/
